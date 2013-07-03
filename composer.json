@@ -1,0 +1,16 @@
+{
+    "name": "ssm/zmqtests",
+    "description": "ZeroMQ Tests",
+    "authors": [
+        {
+            "name": "Scott Smith",
+            "email": "smitherz82@gmail.com"
+        }
+    ],
+    "require": {
+
+    },
+    "autoload": {
+        "psr-0": {"ZmqTests\\": "src/"}
+    }
+}
