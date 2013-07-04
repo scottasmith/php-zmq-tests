@@ -1,5 +1,5 @@
 <?php
-namespace ZmqTests\MessageQueues\SerializeMethod;
+namespace ZmqTests\SerializeMethod;
 
 class Json implements SerializeMethod
 {

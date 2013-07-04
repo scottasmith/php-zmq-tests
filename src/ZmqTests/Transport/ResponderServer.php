@@ -1,5 +1,5 @@
 <?php
-namespace ZmqTests\MessageQueues\Transport;
+namespace ZmqTests\Transport;
 
 class ResponderServer
 {

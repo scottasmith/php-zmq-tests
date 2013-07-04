@@ -1,25 +1,40 @@
 <?php
-namespace ZmqTests\MessageQueues\Serializer;
+namespace ZmqTests\Serializer;
 
-use ZmqTests\MessageQueues\Exception\MessageUnserializeException;
-use ZmqTests\MessageQueues\SerializeMethod\SerializeMethod;
-use ZmqTests\MessageQueues\SerializableMessage;
+use ZmqTests\Exception\MessageUnserializeException;
+use ZmqTests\SerializeMethod\SerializeMethod;
+use ZmqTests\SerializableMessage;
 
 class Reflection
 {
+    // @var SerializeMethod
+    private $serializeMethod;
+
+    // @var array
+    private static $reflectors = array();
+
+    /**
+     * Constructor
+     *
+     * @param SerializeMethod $method
+     */
+    public function __construct(SerializeMethod $method)
+    {
+        $this->serializeMethod = $method;
+    }
+    
     /**
      * Serialize Message
      *
      * @param SerializableMessage $message
-     * @param SerializeMethod $method
      * @return string
      */
-    public function serialize(SerializableMessage $message, SerializeMethod $method)
+    public function serialize(SerializableMessage $message)
     {
         $classProperties = $message->getProperties();
         $className = get_class($message);
 
-        $reflector = new \ReflectionClass($className);
+        $reflector = $this->getReflectionClass($className);
         $reflectedProperties = $reflector->getProperties();
 
         $propertyValues = array();
@@ -35,7 +50,7 @@ class Reflection
             }
         }
 
-        return $method->encode(array(
+        return $this->serializeMethod->encode(array(
             'class' => $className,
             'properties' => $propertyValues,
         ));
@@ -50,7 +65,7 @@ class Reflection
      */
     public function unserialize($messageString, SerializeMethod $method)
     {
-        $messageArray = $method->decode($messageString);
+        $messageArray = $this->serializeMethod->decode($messageString);
         if (!is_array($messageArray)) {
             throw new MessageUnserializeException('Message is not in the correct format', $messageString);
         }
@@ -66,7 +81,7 @@ class Reflection
 
         $propertyValues = $messageArray['properties'];
 
-        $reflector = new \ReflectionClass($className);
+        $reflector = $this->getReflectionClass($className);
         $reflectedProperties = $reflector->getProperties();
         $classInstance = $reflector->newInstanceWithoutConstructor();
         $classProperties = $classInstance->getProperties();
@@ -86,6 +101,21 @@ class Reflection
         }
         
         return $classInstance;
+    }
+
+    /**
+     * Get reflection class
+     *
+     * @param string $className
+     * @return ReflectionClass
+     */
+    private function getReflectionClass($className)
+    {
+        if (!isset(self::$reflectors[$className])) {
+            self::$reflectors[$className] = new \ReflectionClass($className);
+        }
+
+        return self::$reflectors[$className];
     }
 }
 

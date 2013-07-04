@@ -1,5 +1,5 @@
 <?php
-namespace ZmqTests\MessageQueues\Exception;
+namespace ZmqTests\Exception;
 
 class MessageUnserializeException extends \Exception
 {

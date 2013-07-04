@@ -1,8 +1,15 @@
 <?php
-namespace ZmqTests\MessageQueues\Serializer;
+namespace ZmqTests\Serializer;
 
 interface Serializer
 {
+    /**
+     * Constructor
+     *
+     * @param SerializeMethod $method
+     */
+    public function __construct(SerializeMethod $method);
+
     /**
      * Serialize Message
      *

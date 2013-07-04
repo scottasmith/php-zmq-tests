@@ -1,5 +1,5 @@
 <?php
-namespace ZmqTests\MessageQueues;
+namespace ZmqTests;
 
 interface SerializableMessage
 {

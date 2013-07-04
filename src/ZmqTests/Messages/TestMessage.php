@@ -1,7 +1,7 @@
 <?php
-namespace ZmqTests\MessageQueues\Messages;
+namespace ZmqTests\Messages;
 
-use ZmqTests\MessageQueues\SerializableMessage;
+use ZmqTests\SerializableMessage;
 
 class TestMessage implements SerializableMessage
 {
